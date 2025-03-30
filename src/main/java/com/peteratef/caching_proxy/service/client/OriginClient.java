@@ -1,23 +1,22 @@
-package com.peteratef.caching_proxy.service.impl;
+package com.peteratef.caching_proxy.service.client;
 
-import com.peteratef.caching_proxy.service.ProxyService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Service;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Enumeration;
 
-@Service
-public class ProxyServiceImpl implements ProxyService {
-
+@AllArgsConstructor
+@Component
+public class OriginClient {
 
     @Autowired
     private WebClient webClient;
 
-    @Override
     public String forwardRequest(HttpServletRequest request) {
         return webClient
                 .get()
@@ -34,8 +33,12 @@ public class ProxyServiceImpl implements ProxyService {
             // print headers
             String headerName = headerNames.nextElement();
             if(headerName.equalsIgnoreCase("host")) continue;
-            System.out.println(headerName + ": " + request.getHeader(headerName));
+            if(headerName.equalsIgnoreCase("accept-encoding")) continue;
             headers.add(headerName, request.getHeader(headerName));
         }
+        for(String headerName : headers.keySet()) {
+            System.out.println(headerName + ": " + headers.get(headerName));
+        }
+        System.out.println("--------------------------------------------");
     }
 }
