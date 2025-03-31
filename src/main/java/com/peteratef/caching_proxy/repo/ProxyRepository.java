@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProxyRepository extends JpaRepository<CachedResponseEntity, String> {
+
 }
