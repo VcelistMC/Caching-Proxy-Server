@@ -1,41 +1,48 @@
 package com.peteratef.caching_proxy.service;
 
-import com.peteratef.caching_proxy.entity.CachedResponseEntity;
-import com.peteratef.caching_proxy.repo.ProxyRepository;
+import com.peteratef.caching_proxy.cache.TimeoutCache;
+import com.peteratef.caching_proxy.model.CachedResponse;
 import com.peteratef.caching_proxy.service.client.OriginClient;
 import com.peteratef.caching_proxy.util.Hasher;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @AllArgsConstructor
 @Service
 public class ProxyService {
     private OriginClient originClient;
-    private ProxyRepository repository;
+    private TimeoutCache cache;
 
-    @SneakyThrows
+
     public ResponseEntity<String> getRequest(HttpServletRequest request) {
         String hashKey = Hasher.generateMD5HashForURI(request.getRequestURI());
-        Optional<CachedResponseEntity> possibleCacheHit = repository.findById(hashKey);
-        if (possibleCacheHit.isPresent()) {
-            CachedResponseEntity cachedResponseEntity = possibleCacheHit.get();
-            return ResponseEntity.ok(cachedResponseEntity.getResponse());
+        if (cache.exists(hashKey)) {
+            CachedResponse cachedResponse = cache.get(hashKey);;
+            Date date = new Date(cachedResponse.getTimeout());
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .headers(cachedResponse.getHeaders())
+                    .header("X-Cache", "HIT")
+                    .header("X-Cache-TTL", date.toString())
+                    .body(cachedResponse.getBody());
         }else{
-            Thread.sleep(10000);
             var response = originClient.forwardGetRequest(request);
             if(response.getStatus().is2xxSuccessful()){
-                var cachedResponseEntity = CachedResponseEntity.createCachedResponseEntity(request.getRequestURI(), response.getBody());
-                repository.save(cachedResponseEntity);
+                cache.put(hashKey, response);
             }
 
-            return ResponseEntity.status(response.getStatus().value()).headers(response.getHeaders()).body(response.getBody());
+            return ResponseEntity
+                    .status(response.getStatus().value())
+                    .headers(response.getHeaders())
+                    .header("X-Cache", "MISS")
+                    .body(response.getBody());
         }
     }
 }

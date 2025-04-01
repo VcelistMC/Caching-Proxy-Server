@@ -1,12 +1,11 @@
 package com.peteratef.caching_proxy.service.client;
 
-import com.peteratef.caching_proxy.model.Response;
+import com.peteratef.caching_proxy.model.CachedResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -20,8 +19,8 @@ public class OriginClient {
     @Autowired
     private WebClient webClient;
 
-    public Response forwardGetRequest(HttpServletRequest request) {
-        var response = new Response();
+    public CachedResponse forwardGetRequest(HttpServletRequest request) {
+        var response = new CachedResponse();
 
         return webClient
                 .get()
