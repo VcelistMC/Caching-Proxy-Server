@@ -50,6 +50,13 @@ src/main/java/com/peteratef/caching_proxy/
 
 ## Getting Started
 
+### Run using docker
+
+```bash
+docker run -p {HOST_PORT}:{CONTAINER_PORT} peteratef/caching_proxy --port {CONTAINER_PORT} --origin {ORIGIN_URL} --ttl {TTL} 
+```
+Note that the container port mapped to the docker container must match the port you specify to the proxy server
+
 ### Building the Project
 
 ```bash
