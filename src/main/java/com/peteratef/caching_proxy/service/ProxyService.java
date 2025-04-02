@@ -47,4 +47,39 @@ public class ProxyService {
                     .body(response.getBody());
         }
     }
+
+    public ResponseEntity<String> postRequest(HttpServletRequest request) {
+        var response = originClient.forwardPostRequest(request);
+        return ResponseEntity
+                .status(response.getStatus().value())
+                .headers(response.getHeaders())
+                .body(response.getBody());
+    }
+
+
+    public ResponseEntity<String> patchRequest(HttpServletRequest request) {
+        var response = originClient.forwardPatchRequest(request);
+        return ResponseEntity
+                .status(response.getStatus().value())
+                .headers(response.getHeaders())
+                .body(response.getBody());
+    }
+
+
+    public ResponseEntity<String> putRequest(HttpServletRequest request) {
+        var response = originClient.forwardPutRequest(request);
+        return ResponseEntity
+                .status(response.getStatus().value())
+                .headers(response.getHeaders())
+                .body(response.getBody());
+    }
+
+
+    public ResponseEntity<String> deleteRequest(HttpServletRequest request) {
+        var response = originClient.forwardDeleteRequest(request);
+        return ResponseEntity
+                .status(response.getStatus().value())
+                .headers(response.getHeaders())
+                .body(response.getBody());
+    }
 }

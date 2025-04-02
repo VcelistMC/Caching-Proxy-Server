@@ -17,4 +17,24 @@ public class ProxyController {
         return proxyService.getRequest(request);
     }
 
+    @PostMapping("/**")
+    public ResponseEntity<String> proxyPost(HttpServletRequest request) {
+        return proxyService.postRequest(request);
+    }
+
+    @PatchMapping("/**")
+    public ResponseEntity<String> proxyPatch(HttpServletRequest request) {
+        return proxyService.patchRequest(request);
+    }
+
+    @PutMapping("/**")
+    public ResponseEntity<String> proxyPut(HttpServletRequest request) {
+        return proxyService.putRequest(request);
+    }
+
+    @DeleteMapping("/**")
+    public ResponseEntity<String> proxyDelete(HttpServletRequest request) {
+        return proxyService.deleteRequest(request);
+    }
+
 }
