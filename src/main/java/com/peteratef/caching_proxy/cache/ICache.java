@@ -6,20 +6,21 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-@Component
 public abstract class ICache {
     protected final Map<String, CachedResponse> cache = new HashMap<>();
 
-    @Value("${global.ttl}")
-    protected Long ttl;
-
-    public boolean exists(String key){
+    protected boolean exists(String key){
         return cache.containsKey(key);
     }
 
-    public CachedResponse get(String key){
-        return cache.get(key);
+    public Optional<CachedResponse> get(String key){
+        if(exists(key)){
+            return Optional.of(cache.get(key));
+        }else{
+            return Optional.empty();
+        }
     }
 
     public void put(String key, CachedResponse cachedResponse){

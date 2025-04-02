@@ -23,8 +23,9 @@ public class ProxyService {
 
     public ResponseEntity<String> getRequest(HttpServletRequest request) {
         String hashKey = Hasher.generateMD5HashForURI(request.getRequestURI());
-        if (cache.exists(hashKey)) {
-            CachedResponse cachedResponse = cache.get(hashKey);;
+        Optional<CachedResponse> cachedResponseOptional = cache.get(hashKey);;
+        if (cachedResponseOptional.isPresent()) {
+            CachedResponse cachedResponse = cachedResponseOptional.get();
             Date date = new Date(cachedResponse.getTimeout());
             return ResponseEntity
                     .status(HttpStatus.OK)
