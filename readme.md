@@ -4,7 +4,7 @@ A lightweight HTTP caching proxy server built with Spring Boot.
 
 ## Overview
 
-This application serves as an intermediary proxy that caches responses from an origin server. It intercepts HTTP GET requests, forwards them to the specified origin server, and caches the responses based on a configurable time-to-live (TTL).
+This application serves as an intermediary proxy that caches responses from an origin server. It intercepts HTTP GET requests, forwards them to the specified origin server, and caches the responses based on a configurable time-to-live (TTL) and allows all other HTTP methods to pass through without interception.
 
 ## Features
 
