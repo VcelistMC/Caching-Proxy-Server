@@ -1,5 +1,6 @@
 package com.peteratef.caching_proxy.service;
 
+import com.peteratef.caching_proxy.cache.ICache;
 import com.peteratef.caching_proxy.cache.TimeoutCache;
 import com.peteratef.caching_proxy.model.CachedResponse;
 import com.peteratef.caching_proxy.service.client.OriginClient;
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class ProxyService {
     private OriginClient originClient;
-    private TimeoutCache cache;
+    private ICache cache;
 
 
     public ResponseEntity<String> getRequest(HttpServletRequest request) {

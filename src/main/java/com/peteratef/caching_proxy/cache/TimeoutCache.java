@@ -2,6 +2,7 @@ package com.peteratef.caching_proxy.cache;
 
 import com.peteratef.caching_proxy.model.CachedResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
+@Primary
 public class TimeoutCache extends ICache{
 
     @Value("${global.ttl}")
