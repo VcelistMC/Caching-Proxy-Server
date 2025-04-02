@@ -22,16 +22,14 @@ public class TimeoutCache extends ICache{
 
     @Override
     public Optional<CachedResponse> get(String key) {
+        if(!exists(key)) {return Optional.empty();}
         var cachedResponse = cache.get(key);
-        if(isStale(cachedResponse)){
-            return Optional.empty();
-        }
-
+        if(isStale(cachedResponse)) {return Optional.empty();}
         return Optional.of(cachedResponse);
     }
 
     private boolean isStale(CachedResponse cachedResponse) {
-        return cachedResponse.getTimeout() > System.currentTimeMillis();
+        return cachedResponse.getTimeout() < System.currentTimeMillis();
     }
 
     @Override
