@@ -1,6 +1,6 @@
 # Caching Proxy
 
-A lightweight HTTP caching proxy server built with Spring Boot.
+A lightweight HTTP caching proxy server built with Spring Boot for the roadmap.sh project https://roadmap.sh/projects/caching-server.
 
 ## Overview
 
